@@ -37,6 +37,9 @@ public final class TheGoldEconomy extends JavaPlugin {
             bundle = ResourceBundle.getBundle("messages", Locale.GERMANY);
         } else if ("en_US".equals(configFile.getString("language"))) {
             bundle = ResourceBundle.getBundle("messages", Locale.US);
+        } else if ("pt_BR".equals(configFile.getString("language"))) {
+            Locale locale = new Locale("pt", "BR");
+            bundle = ResourceBundle.getBundle("messages", locale);
         } else if ("zh_CN".equals(configFile.getString("language"))) {
             bundle = ResourceBundle.getBundle("messages", Locale.SIMPLIFIED_CHINESE);
         } else if ("es_ES".equals(configFile.getString("language"))) {
