@@ -1,5 +1,5 @@
 # Remove Gold Drops from Mobs like Piglins? (default: true)
-removeGoldDrop: true
+# removeGoldDrop: false
 # Should the plugin check for updated? (default: true)
 updateCheck: true
 # Valid language are:
@@ -8,6 +8,7 @@ updateCheck: true
 # Spanish: es_ES
 # Simplified Chinese: zh_CN
 # Turkish: tr_TR
+# Brazilian Portuguese: pt_BR
 language: "en_US"
 # Do you want to restrict bank commands to bank plots (requires Towny)
 restrictToBankPlot: false
@@ -16,4 +17,4 @@ prefix: "TheGoldEconomy"
 # This value sets the base domination of the economy
 # 'nuggets' = 1 nugget is 1 currency, 1 ingot is 9, 1 block is 81
 # 'ingots'  = 1 ingots is 1 currency, 1 block is 9
-base: "nuggets"
+base: "ingots"

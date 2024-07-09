@@ -20,37 +20,41 @@ public class Converter {
     }
 
     public int getValue(Material material) {
-        if (eco.plugin.getConfig().getString("base").equals("nuggets")) {
-            if (material.equals(Material.GOLD_NUGGET)) return 1;
-            if (material.equals(Material.GOLD_INGOT)) return 9;
-            if (material.equals(Material.GOLD_BLOCK)) return 81;
-        } else {
-            if (material.equals(Material.GOLD_INGOT)) return 1;
-            if (material.equals(Material.GOLD_BLOCK)) return 9;
-        }
+        // if (eco.plugin.getConfig().getString("base").equals("nuggets")) {
+        // if (material.equals(Material.GOLD_NUGGET)) return 1;
+        // if (material.equals(Material.DIAMOND)) return 9;
+        // if (material.equals(Material.DIAMOND_BLOCK)) return 81;
+        // } else {
+        if (material.equals(Material.DIAMOND))
+            return 1;
+        if (material.equals(Material.DIAMOND_BLOCK))
+            return 9;
+        // }
         return 0;
     }
 
-    public boolean isNotGold(Material material) {
-        switch(material) {
-            case GOLD_BLOCK:
-            case GOLD_INGOT:
-            case GOLD_NUGGET:
+    public boolean isNotDiamond(Material material) {
+        switch (material) {
+            case DIAMOND_BLOCK:
+            case DIAMOND:
+                // case GOLD_NUGGET:
                 return false;
             default:
                 return true;
         }
     }
 
-    public int getInventoryValue(Player player){
+    public int getInventoryValue(Player player) {
         int value = 0;
 
         // calculating the value of all the gold in the inventory to nuggets
         for (ItemStack item : player.getInventory()) {
-            if (item == null) continue;
+            if (item == null)
+                continue;
             Material material = item.getType();
 
-            if (isNotGold(material)) continue;
+            if (isNotDiamond(material))
+                continue;
 
             value += (getValue(material) * item.getAmount());
 
@@ -58,26 +62,31 @@ public class Converter {
         return value;
     }
 
-    public void remove(Player player, int amount){
+    public void remove(Player player, int amount) {
         int value = 0;
 
         // calculating the value of all the gold in the inventory to nuggets
         for (ItemStack item : player.getInventory()) {
-            if (item == null) continue;
+            if (item == null)
+                continue;
             Material material = item.getType();
 
-            if (isNotGold(material)) continue;
+            if (isNotDiamond(material))
+                continue;
 
             value += (getValue(material) * item.getAmount());
         }
 
         // Checks if the Value of the items is greater than the amount to deposit
-        if (value < amount) return;
+        if (value < amount)
+            return;
 
         // Deletes all gold items
         for (ItemStack item : player.getInventory()) {
-            if (item == null) continue;
-            if (isNotGold(item.getType())) continue;
+            if (item == null)
+                continue;
+            if (isNotDiamond(item.getType()))
+                continue;
 
             item.setAmount(0);
             item.setType(Material.AIR);
@@ -87,61 +96,67 @@ public class Converter {
         give(player, newBalance);
     }
 
-    public void give(Player player, int value){
+    public void give(Player player, int value) {
         boolean warning = false;
 
-        int blockValue = getValue(Material.GOLD_BLOCK);
-        int ingotValue = getValue(Material.GOLD_INGOT);
+        int blockValue = getValue(Material.DIAMOND_BLOCK);
+        int ingotValue = getValue(Material.DIAMOND);
 
-        if (value/blockValue > 0) {
-            HashMap<Integer, ItemStack> blocks = player.getInventory().addItem(new ItemStack(Material.GOLD_BLOCK, value / blockValue));
+        if (value / blockValue > 0) {
+            HashMap<Integer, ItemStack> blocks = player.getInventory()
+                    .addItem(new ItemStack(Material.DIAMOND_BLOCK, value / blockValue));
             for (ItemStack item : blocks.values()) {
-                if (item != null && item.getType() == Material.GOLD_BLOCK && item.getAmount() > 0) {
+                if (item != null && item.getType() == Material.DIAMOND_BLOCK && item.getAmount() > 0) {
                     player.getWorld().dropItem(player.getLocation(), item);
                     warning = true;
                 }
             }
         }
 
-        value -= (value/blockValue)*blockValue;
+        value -= (value / blockValue) * blockValue;
 
-        if (value/ingotValue > 0) {
-            HashMap<Integer, ItemStack> ingots = player.getInventory().addItem(new ItemStack(Material.GOLD_INGOT, value / ingotValue));
+        if (value / ingotValue > 0) {
+            HashMap<Integer, ItemStack> ingots = player.getInventory()
+                    .addItem(new ItemStack(Material.DIAMOND, value / ingotValue));
             for (ItemStack item : ingots.values()) {
-                if (item != null && item.getType() == Material.GOLD_INGOT && item.getAmount() > 0) {
+                if (item != null && item.getType() == Material.DIAMOND && item.getAmount() > 0) {
                     player.getWorld().dropItem(player.getLocation(), item);
                     warning = true;
                 }
             }
         }
 
-        value -= (value/ingotValue)*ingotValue;
+        value -= (value / ingotValue) * ingotValue;
 
-        if (eco.plugin.getConfig().getString("base").equals("nuggets") && value > 0) {
-            HashMap<Integer, ItemStack> nuggets = player.getInventory().addItem(new ItemStack(Material.GOLD_NUGGET, value));
-            for (ItemStack item : nuggets.values()) {
-                if (item != null && item.getType() == Material.GOLD_NUGGET && item.getAmount() > 0) {
-                    player.getWorld().dropItem(player.getLocation(), item);
-                    warning = true;
-                }
-            }
-        }
+        // if (eco.plugin.getConfig().getString("base").equals("nuggets") && value > 0)
+        // {
+        // HashMap<Integer, ItemStack> nuggets = player.getInventory()
+        // .addItem(new ItemStack(Material.GOLD_NUGGET, value));
+        // for (ItemStack item : nuggets.values()) {
+        // if (item != null && item.getType() == Material.GOLD_NUGGET &&
+        // item.getAmount() > 0) {
+        // player.getWorld().dropItem(player.getLocation(), item);
+        // warning = true;
+        // }
+        // }
+        // }
 
-        if (warning) eco.util.sendMessageToPlayer(String.format(bundle.getString("warning.drops")), player);
+        if (warning)
+            eco.util.sendMessageToPlayer(String.format(bundle.getString("warning.drops")), player);
     }
 
-
-    public void withdrawAll(Player player){
+    public void withdrawAll(Player player) {
         String uuid = player.getUniqueId().toString();
 
-        // searches in the Hashmap for the balance, so that a player can't withdraw gold from his Inventory
+        // searches in the Hashmap for the balance, so that a player can't withdraw gold
+        // from his Inventory
         int value = eco.bank.getAccountBalance(player.getUniqueId().toString());
         eco.bank.setBalance(uuid, (0));
 
         give(player, value);
     }
 
-    public void withdraw(Player player, int nuggets){
+    public void withdraw(Player player, int nuggets) {
         String uuid = player.getUniqueId().toString();
         int oldbalance = eco.bank.getAccountBalance(player.getUniqueId().toString());
 
@@ -156,18 +171,21 @@ public class Converter {
 
     }
 
-    public void depositAll(Player player){
+    public void depositAll(Player player) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player.getUniqueId());
         int value = 0;
 
         for (ItemStack item : player.getInventory()) {
-            if (item == null) continue;
+            if (item == null)
+                continue;
             Material material = item.getType();
 
-            if (isNotGold(material)) continue;
+            if (isNotDiamond(material))
+                continue;
 
             value = value + (getValue(material) * item.getAmount());
-            if (getValue(material) != 0) item.setAmount(0);
+            if (getValue(material) != 0)
+                item.setAmount(0);
             item.setType(Material.AIR);
         }
 
@@ -175,7 +193,7 @@ public class Converter {
 
     }
 
-    public void deposit(Player player, int nuggets){
+    public void deposit(Player player, int nuggets) {
         OfflinePlayer op = Bukkit.getOfflinePlayer(player.getUniqueId());
 
         remove(player, nuggets);
