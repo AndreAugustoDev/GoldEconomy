@@ -7,6 +7,7 @@ updateCheck: true
 # Spanish: es_ES
 # Simplified Chinese: zh_CN
 # Turkish: tr_TR
+# Brazilian Portuguese: pt_BR
 language: "en_US"
 
 # Prefix (default: TheGoldEconomy)
