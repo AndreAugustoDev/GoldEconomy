@@ -29,9 +29,9 @@ public class RemoveGoldDrops implements Listener {
     }
 
     @EventHandler
-    public void entityDeathEvent(EntityDeathEvent e){
-        if (e.getEntityType().equals(EntityType.PLAYER)) return;
+    public void entityDeathEvent(EntityDeathEvent event){
+        if (event.getEntityType().equals(EntityType.PLAYER)) return;
 
-        e.getDrops().removeIf(item -> shouldRemove(item.getType()));
+        event.getDrops().removeIf(item -> shouldRemove(item.getType()));
     }
 }
